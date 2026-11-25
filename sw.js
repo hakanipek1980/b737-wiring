@@ -1,9 +1,9 @@
 /* B737NG / 737MAX Wiring Reference — Offline Hangar Service Worker (PWA) */
-const CACHE_NAME = "b737-wiring-pwa-v1";
+const CACHE_NAME = "b737-wiring-pwa-v2";
 const CORE_ASSETS = [
   "./",
   "./index.html",
-  "./style.css",
+  "./style.css?v=2",
   "./app.js",
   "./manifest.webmanifest",
   "./assets/icon-192.png",
@@ -32,9 +32,15 @@ self.addEventListener("fetch", (event) => {
   const url = new URL(req.url);
   if (url.origin !== self.location.origin) return;
 
-  // Network-first for database JSON so updates arrive automatically when online,
-  // with instant offline fallback in the hangar / airplane mode.
-  if (url.pathname.endsWith("/wiring-db.json") || url.pathname.endsWith("/index.html") || url.pathname.endsWith("/")) {
+  // Network-first for HTML, CSS, JS, and database JSON so UI/data updates land immediately
+  // when online, with seamless offline cache fallback in airplane mode / hangar.
+  if (
+    url.pathname.endsWith("/") ||
+    url.pathname.endsWith(".html") ||
+    url.pathname.endsWith(".css") ||
+    url.pathname.endsWith(".js") ||
+    url.pathname.endsWith(".json")
+  ) {
     event.respondWith(
       fetch(req)
         .then((res) => {

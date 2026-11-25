@@ -124,6 +124,8 @@ html,
 body {
   margin: 0;
   padding: 0;
+  max-width: 100%;
+  overflow-x: clip;
 }
 
 body {
@@ -1777,11 +1779,28 @@ code {
    ========================================================================== */
 @media (max-width: 1024px) {
   .split-workbench {
-    grid-template-columns: 1fr;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
   }
 
   .workbench-right {
     position: static;
+    order: -1;
+    width: 100%;
+  }
+
+  .workbench-left {
+    width: 100%;
+  }
+
+  .blueprint-stage {
+    min-height: 210px;
+    padding: 0.85rem;
+  }
+
+  .diagram-img {
+    max-height: 230px;
   }
 
   .sources-two-col {
@@ -1790,18 +1809,106 @@ code {
 }
 
 @media (max-width: 640px) {
-  .header-inner,
-  .hero-deck,
-  .module-nav-inner,
-  .workspace-shell {
-    padding-left: 1rem;
-    padding-right: 1rem;
+  /* Compact non-sticky safety banner on small phones so screen space stays usable */
+  .safety-banner {
+    position: static;
+    padding: 0.38rem 0.75rem;
+    font-size: 0.72rem;
+    line-height: 1.35;
+    text-align: left;
+    justify-content: flex-start;
+  }
+
+  .header-inner {
+    padding: 0.65rem 0.85rem;
+    gap: 0.6rem;
+  }
+
+  .brand {
+    gap: 0.6rem;
+    width: 100%;
+  }
+
+  .brand-emblem {
+    width: 34px;
+    height: 34px;
+    border-radius: 9px;
+    flex-shrink: 0;
+  }
+
+  .brand-emblem svg {
+    width: 24px;
+    height: 24px;
+  }
+
+  .brand h1 {
+    font-size: 0.98rem;
+    line-height: 1.2;
+  }
+
+  .subtitle {
+    display: none;
+  }
+
+  /* Single clean horizontal swipeable filter bar instead of 4 stacked rows */
+  .header-controls {
+    width: 100%;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    gap: 0.45rem;
+    padding-bottom: 2px;
+  }
+
+  .header-controls::-webkit-scrollbar {
+    display: none;
+  }
+
+  .control-group {
+    flex-shrink: 0;
+  }
+
+  .seg-btn {
+    padding: 0.35rem 0.6rem;
+    font-size: 0.74rem;
+    min-height: 32px;
+    white-space: nowrap;
+  }
+
+  .icon-btn {
+    flex-shrink: 0;
+    min-height: 36px;
+    padding: 0.35rem 0.68rem;
+    font-size: 0.76rem;
+    white-space: nowrap;
+  }
+
+  /* Compact Hero Search */
+  .hero-deck {
+    padding: 0.8rem 0.85rem 0.75rem;
+  }
+
+  .hero-label-row {
+    margin-bottom: 0.45rem;
+  }
+
+  .hero-telemetry,
+  .scope-hint {
+    display: none;
+  }
+
+  .hero-search-icon {
+    left: 0.85rem;
+    width: 18px;
+    height: 18px;
   }
 
   .hero-search-input {
-    min-height: 52px;
-    font-size: 0.94rem;
-    padding-right: 3.1rem;
+    min-height: 48px;
+    font-size: 16px; /* Prevents mobile browser auto-zoom on input focus */
+    padding: 0.65rem 2.75rem 0.65rem 2.6rem;
+    border-radius: 11px;
   }
 
   .kbd-hint {
@@ -1809,20 +1916,50 @@ code {
   }
 
   .hero-clear-btn {
-    right: 0.8rem;
+    right: 0.55rem;
   }
 
-  .spec-sheet,
-  .panel-card,
-  .decoder-input-card {
-    padding: 1rem;
+  .hero-meta-bar {
+    margin-top: 0.55rem;
+    gap: 0.5rem;
   }
 
-  .tech-table.kv-table th {
-    width: 42%;
+  .hero-toggles {
+    margin-left: 0;
+    width: 100%;
+    gap: 0.45rem;
   }
 
+  .toggle-chip {
+    font-size: 0.74rem;
+    padding: 0.3rem 0.58rem;
+    flex: 1 1 auto;
+    justify-content: center;
+  }
+
+  /* Autocomplete stacked cleanly for narrow screens */
+  .ac-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.35rem;
+    padding: 0.65rem 0.8rem;
+  }
+
+  .ac-main,
+  .ac-code,
+  .ac-title {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .ac-code {
+    font-size: 0.84rem;
+    word-break: break-word;
+  }
+
+  /* Module Nav Rail */
   .module-nav-inner {
+    padding: 0 0.65rem;
     overflow-x: auto;
     flex-wrap: nowrap;
     -webkit-overflow-scrolling: touch;
@@ -1837,11 +1974,227 @@ code {
     white-space: nowrap;
     flex-shrink: 0;
     min-height: 44px;
+    padding: 0.5rem 0.72rem;
+    font-size: 0.8rem;
+  }
+
+  /* Workspace & Spec Cards */
+  .workspace-shell {
+    padding: 0.85rem 0.75rem 2.2rem;
+  }
+
+  .spec-sheet,
+  .panel-card,
+  .decoder-input-card {
+    padding: 0.9rem;
+    border-radius: 12px;
+  }
+
+  .sheet-header {
+    gap: 0.6rem;
+    padding-bottom: 0.75rem;
+  }
+
+  .hero-pn {
+    font-size: 1.05rem;
+  }
+
+  .sheet-subtitle {
+    font-size: 0.82rem;
+  }
+
+  .sheet-actions {
+    width: 100%;
+  }
+
+  .sheet-actions .secondary-btn {
+    flex: 1;
+  }
+
+  .section-label {
+    font-size: 0.7rem;
+    letter-spacing: 0.06em;
+    margin: 1rem 0 0.5rem;
+  }
+
+  .tool-chip {
+    font-size: 0.72rem;
+    word-break: break-word;
+    max-width: 100%;
+  }
+
+  /* Key-Value Table -> Stacked Full-Width Rows (Zero Cramping!) */
+  .tech-table.kv-table,
+  .tech-table.kv-table tbody,
+  .tech-table.kv-table tr,
+  .tech-table.kv-table th,
+  .tech-table.kv-table td {
+    display: block;
+    width: 100%;
+  }
+
+  .tech-table.kv-table tr {
+    padding: 0.55rem 0.75rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .tech-table.kv-table tr:last-child {
+    border-bottom: none;
+  }
+
+  .tech-table.kv-table th {
+    width: 100%;
+    padding: 0 0 0.2rem;
+    border: none;
+    background: transparent;
+    font-family: var(--mono);
+    font-size: 0.68rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--orange);
+  }
+
+  .tech-table.kv-table td {
+    padding: 0;
+    border: none;
+    font-size: 0.84rem;
+    word-break: break-word;
+    overflow-wrap: anywhere;
+  }
+
+  /* Multi-column Data Tables (Contacts & Tooling / Superseding) -> Clean Stacked Mobile Cards */
+  .tech-table:not(.kv-table):not(.compact-table) thead {
+    display: none;
+  }
+
+  .tech-table:not(.kv-table):not(.compact-table),
+  .tech-table:not(.kv-table):not(.compact-table) tbody,
+  .tech-table:not(.kv-table):not(.compact-table) tr,
+  .tech-table:not(.kv-table):not(.compact-table) td {
+    display: block;
+    width: 100%;
+  }
+
+  .tech-table:not(.kv-table):not(.compact-table) tbody tr {
+    padding: 0.75rem;
+    border-bottom: 2px solid var(--border-strong);
+  }
+
+  .tech-table:not(.kv-table):not(.compact-table) tbody tr:last-child {
+    border-bottom: none;
+  }
+
+  .tech-table:not(.kv-table):not(.compact-table) td {
+    padding: 0.32rem 0;
+    border: none;
+    font-size: 0.83rem;
+    word-break: break-word;
+    overflow-wrap: anywhere;
+  }
+
+  .tech-table:not(.kv-table):not(.compact-table) td[colspan] {
+    padding: 0.25rem 0;
+  }
+
+  .tech-table:not(.kv-table):not(.compact-table) td:not([colspan]):nth-child(1)::before {
+    content: "PRIMARY / CONTACT";
+    display: block;
+    font-family: var(--mono);
+    font-size: 0.66rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    color: var(--orange);
+    margin-bottom: 0.16rem;
+  }
+
+  .tech-table:not(.kv-table):not(.compact-table) td:not([colspan]):nth-child(2)::before {
+    content: "CRIMP TOOL & TURRET / PART NO";
+    display: block;
+    font-family: var(--mono);
+    font-size: 0.66rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    color: var(--orange);
+    margin-top: 0.35rem;
+    margin-bottom: 0.16rem;
+  }
+
+  .tech-table:not(.kv-table):not(.compact-table) td:not([colspan]):nth-child(3)::before {
+    content: "INS / REM TOOL / NOTES";
+    display: block;
+    font-family: var(--mono);
+    font-size: 0.66rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    color: var(--orange);
+    margin-top: 0.35rem;
+    margin-bottom: 0.16rem;
+  }
+
+  .tech-table:not(.kv-table):not(.compact-table) td:not([colspan]):nth-child(4)::before {
+    content: "STRIP LENGTH";
+    display: block;
+    font-family: var(--mono);
+    font-size: 0.66rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    color: var(--orange);
+    margin-top: 0.35rem;
+    margin-bottom: 0.16rem;
+  }
+
+  /* Compact 6-column Pin-Out table scrolls smoothly horizontally inside its box */
+  .tech-table.compact-table {
+    min-width: 520px;
+  }
+
+  /* Visual Inspector Compact Mobile Polish */
+  .visual-panel-header {
+    padding: 0.75rem 0.9rem;
+  }
+
+  .visual-panel-header h3 {
+    font-size: 0.86rem;
+  }
+
+  .visual-cat-tabs {
+    padding: 0.45rem 0.75rem;
+  }
+
+  .visual-thumbs {
+    padding: 0.55rem 0.75rem;
+  }
+
+  .visual-footer {
+    padding: 0.7rem 0.85rem;
+  }
+
+  .visual-actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.45rem;
+  }
+
+  .visual-actions a {
+    font-size: 0.73rem;
+    padding: 0.35rem 0.45rem;
+    text-align: center;
   }
 
   .copy-btn,
   .visual-cat-tab,
   .thumb-btn {
     min-height: 36px;
+  }
+
+  /* Lightbox Mobile Controls */
+  .lightbox-header {
+    flex-wrap: wrap;
+    padding: 0.7rem 0.85rem;
+    gap: 0.5rem;
+  }
+
+  .lightbox-controls {
+    flex-wrap: wrap;
   }
 }
