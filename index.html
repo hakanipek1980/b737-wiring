@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#0b0f17" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="B737 Wiring" />
+  <title>B737NG / 737MAX — Wiring &amp; SWPM Reference</title>
+  <link rel="manifest" href="manifest.webmanifest" />
+  <link rel="icon" type="image/png" sizes="192x192" href="assets/icon-192.png" />
+  <link rel="apple-touch-icon" href="assets/icon-192.png" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <!-- Mandatory Persistent Aviation Safety Disclaimer -->
+  <div class="safety-banner" role="alert" aria-live="polite">
+    <svg class="icon-sm safety-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true">
+      <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+      <line x1="12" y1="9" x2="12" y2="13"/>
+      <line x1="12" y1="17" x2="12.01" y2="17"/>
+    </svg>
+    <span id="disclaimer-text">
+      For reference and training purposes only; verify current Boeing AMM/SWPM/WDM revision before performing aircraft maintenance.
+    </span>
+  </div>
+
+  <!-- Top Instrumentation Header -->
+  <header class="app-header">
+    <div class="header-inner">
+      <div class="brand">
+        <div class="brand-emblem" aria-hidden="true">
+          <svg viewBox="0 0 36 36" fill="none">
+            <circle cx="18" cy="18" r="15.5" stroke="currentColor" stroke-width="1.8" stroke-dasharray="3 2.5" opacity="0.6"/>
+            <circle cx="18" cy="18" r="11.5" stroke="currentColor" stroke-width="1.8"/>
+            <circle cx="18" cy="12" r="2" fill="currentColor"/>
+            <circle cx="12.8" cy="20.5" r="2" fill="currentColor"/>
+            <circle cx="23.2" cy="20.5" r="2" fill="currentColor"/>
+            <circle cx="18" cy="18" r="1.6" fill="#F59E0B"/>
+          </svg>
+        </div>
+        <div class="brand-copy">
+          <div class="brand-title-row">
+            <h1>B737NG / 737MAX Wiring Reference</h1>
+            <span class="ata-pill">ATA 20</span>
+          </div>
+          <p class="subtitle">SWPM Chapter 20 &bull; WDM Equipment Lookup &bull; Tooling &amp; EWIS Workbench</p>
+        </div>
+      </div>
+
+      <div class="header-controls">
+        <div class="control-group" role="group" aria-label="Aircraft Platform Filter">
+          <button type="button" class="seg-btn active" data-aircraft="all">ALL</button>
+          <button type="button" class="seg-btn" data-aircraft="737NG">737NG</button>
+          <button type="button" class="seg-btn" data-aircraft="737MAX">737MAX</button>
+        </div>
+
+        <div class="control-group" role="group" aria-label="Source Layer Filter">
+          <button type="button" class="seg-btn active" data-layer="all">All Layers</button>
+          <button type="button" class="seg-btn" data-layer="primary-737">737 Primary</button>
+          <button type="button" class="seg-btn" data-layer="secondary-industry">Industry</button>
+        </div>
+
+        <button type="button" id="theme-toggle" class="icon-btn" title="Toggle Theme (Avionics Dark / Daylight Hangar)">
+          <svg id="theme-icon" class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <circle cx="12" cy="12" r="5"/>
+            <line x1="12" y1="1" x2="12" y2="3"/>
+            <line x1="12" y1="21" x2="12" y2="23"/>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+            <line x1="1" y1="12" x2="3" y2="12"/>
+            <line x1="21" y1="12" x2="23" y2="12"/>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+          </svg>
+          <span id="theme-label">Daylight</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- HERO SEARCH COMMAND DECK -->
+  <section class="hero-deck" aria-label="Universal Technical Search">
+    <div class="hero-inner">
+      <div class="hero-label-row">
+        <span class="hero-kicker">INSTANT AVIONICS LOOKUP</span>
+        <span class="hero-telemetry" id="hero-telemetry">0 Verified Records &bull; Zero Hallucination Mode</span>
+      </div>
+
+      <div class="hero-search-wrap">
+        <svg class="hero-search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true">
+          <circle cx="11" cy="11" r="8"/>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+        </svg>
+
+        <label for="hero-search-input" class="sr-only">Search WDM Equipment No, Connector P/N, Contact, Tooling, Splice, or SWPM Ref</label>
+        <input
+          type="search"
+          id="hero-search-input"
+          class="hero-search-input"
+          placeholder="Search WDM Equip No (e.g. D1024P, J201), Connector P/N (BACC63BV..., MS3476...), Contact, Crimp Tool, Splice or SWPM..."
+          autocomplete="off"
+          spellcheck="false"
+        />
+
+        <button type="button" id="hero-clear-btn" class="hero-clear-btn hidden" aria-label="Clear search">&times;</button>
+        <kbd class="kbd-hint" title="Press / to focus search">/</kbd>
+
+        <!-- Live Autocomplete Dropdown -->
+        <div id="autocomplete-list" class="autocomplete-list hidden" role="listbox" aria-label="Live Search Suggestions"></div>
+      </div>
+
+      <!-- Quick Filters, Recent Searches & Pinned Favorites -->
+      <div class="hero-meta-bar">
+        <div class="quick-chips-area">
+          <div id="favorites-strip" class="chip-group hidden">
+            <span class="chip-group-label">&#9733; Pinned:</span>
+            <div id="favorites-chips" class="chip-list"></div>
+          </div>
+          <div id="recent-strip" class="chip-group hidden">
+            <span class="chip-group-label">Recent:</span>
+            <div id="recent-chips" class="chip-list"></div>
+          </div>
+          <div id="search-scope-hint" class="scope-hint">
+            <span class="scope-hint-label">Indexed fields:</span>
+            <span class="scope-tag">WDM Equip No</span>
+            <span class="scope-tag">Connector P/N</span>
+            <span class="scope-tag">Contact / AWG</span>
+            <span class="scope-tag">Crimp &amp; Turret</span>
+            <span class="scope-tag">SWPM Ref</span>
+          </div>
+        </div>
+
+        <div class="hero-toggles">
+          <label class="toggle-chip">
+            <input type="checkbox" id="ewis-only-toggle" />
+            <span>EWIS Critical Only</span>
+          </label>
+          <label class="toggle-chip">
+            <input type="checkbox" id="show-templates-toggle" checked />
+            <span>Show Schema Previews</span>
+          </label>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MODULE NAVIGATION RAIL -->
+  <nav class="module-nav" aria-label="Workbench Modules">
+    <div class="module-nav-inner">
+      <button type="button" class="nav-tab active" data-tab="connectors">
+        <span class="nav-dot"></span>
+        <span>Connectors &amp; Tooling</span>
+        <span class="tab-count" id="count-connectors">0</span>
+      </button>
+      <button type="button" class="nav-tab" data-tab="splices">
+        <span class="nav-dot"></span>
+        <span>Splices, Terminals &amp; Grounding</span>
+        <span class="tab-count" id="count-splices">0</span>
+      </button>
+      <button type="button" class="nav-tab" data-tab="procedures">
+        <span class="nav-dot"></span>
+        <span>SWPM Ch. 20 Procedures</span>
+        <span class="tab-count" id="count-procedures">0</span>
+      </button>
+      <button type="button" class="nav-tab" data-tab="decoder">
+        <span class="nav-dot"></span>
+        <span>Wire &amp; Code Decoder</span>
+        <span class="tab-count" id="count-decoder">0</span>
+      </button>
+      <button type="button" class="nav-tab" data-tab="sources">
+        <span class="nav-dot"></span>
+        <span>Sources &amp; Database</span>
+        <span class="tab-count" id="count-sources">0</span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- MAIN WORKSPACE -->
+  <main class="workspace-shell">
+    <div id="data-notice" class="notice-bar hidden"></div>
+
+    <!-- ZERO-HALLUCINATION NOT FOUND BANNER (Shown when search yields 0 matches globally) -->
+    <div id="global-not-found" class="not-found-card hidden" role="status"></div>
+
+    <!-- TWO-COLUMN SPLIT WORKBENCH (Active for Modules 1-4) -->
+    <div id="split-workbench" class="split-workbench">
+      <!-- LEFT COLUMN: STRUCTURED TECHNICAL TABLE & CARDS -->
+      <div class="workbench-left">
+        <!-- Module 1: Connectors & Tooling -->
+        <section id="panel-connectors" class="tab-panel active" aria-label="Connectors and Tooling">
+          <div id="connectors-selector" class="match-selector hidden"></div>
+          <div id="connectors-detail"></div>
+        </section>
+
+        <!-- Module 2: Splices, Terminals & Grounding -->
+        <section id="panel-splices" class="tab-panel" aria-label="Splices Terminals and Grounding">
+          <div id="splices-selector" class="match-selector hidden"></div>
+          <div id="splices-detail"></div>
+        </section>
+
+        <!-- Module 3: SWPM Ch. 20 Procedures -->
+        <section id="panel-procedures" class="tab-panel" aria-label="SWPM Chapter 20 Procedures">
+          <div id="procedures-selector" class="match-selector hidden"></div>
+          <div id="procedures-detail"></div>
+        </section>
+
+        <!-- Module 4: Wire & Code Decoder -->
+        <section id="panel-decoder" class="tab-panel" aria-label="Wire and Code Decoder">
+          <div class="decoder-input-card">
+            <div class="decoder-input-header">
+              <div>
+                <h2>Wire Number / WDM Code Quick Inspector</h2>
+                <p class="muted">Enter a wire tag or BMS wire spec to check against verified 737 WDM / SWPM 20-00 decoding rules.</p>
+              </div>
+              <span class="badge badge-template">RULES PENDING 737 SOURCE</span>
+            </div>
+            <div class="decoder-input-row">
+              <input
+                type="text"
+                id="wire-code-input"
+                class="mono-input"
+                placeholder="Enter wire code or spec (verified rules load from context/kaynaklar/)..."
+                autocomplete="off"
+                spellcheck="false"
+              />
+              <button type="button" id="wire-decode-btn" class="primary-btn">Inspect Code</button>
+            </div>
+            <div id="wire-decode-output" class="decoder-output hidden"></div>
+          </div>
+
+          <div id="decoder-detail"></div>
+        </section>
+      </div>
+
+      <!-- RIGHT COLUMN: STICKY VISUAL & DIAGRAM INSPECTOR -->
+      <aside class="workbench-right" aria-label="Visual and Diagram Viewer">
+        <div class="visual-panel" id="visual-panel">
+          <div class="visual-panel-header">
+            <div>
+              <span class="visual-kicker">VISUAL &amp; DIAGRAM INSPECTOR</span>
+              <h3 id="visual-title">Select a record to inspect</h3>
+            </div>
+            <button type="button" id="visual-zoom-btn" class="secondary-btn compact-btn hidden" title="Open Full-Screen Zoom">
+              Zoom
+            </button>
+          </div>
+
+          <div id="visual-cat-tabs" class="visual-cat-tabs hidden" role="tablist" aria-label="Diagram Categories"></div>
+
+          <div class="blueprint-stage" id="blueprint-stage">
+            <!-- Dynamically populated: local diagram image OR precision wireframe schematic -->
+          </div>
+
+          <div id="visual-thumbs" class="visual-thumbs hidden"></div>
+
+          <div class="visual-footer" id="visual-footer"></div>
+        </div>
+      </aside>
+    </div>
+
+    <!-- MODULE 5: SOURCES & DATABASE AUDIT (Full-Width Dashboard) -->
+    <section id="panel-sources" class="tab-panel sources-panel" aria-label="Sources and Database Audit">
+      <div class="sources-header">
+        <div>
+          <h2>Sources &amp; Zero-Hallucination Audit</h2>
+          <p class="muted">Live status of <code>app/data/wiring-db.json</code>, verified Boeing 737NG/737MAX sources, and Excel/CSV intake schema.</p>
+        </div>
+        <label class="primary-btn file-btn">
+          Load Local JSON
+          <input type="file" id="json-file-input" accept=".json,application/json" hidden />
+        </label>
+      </div>
+
+      <div id="sources-kpis" class="kpi-grid"></div>
+
+      <div class="sources-two-col">
+        <div class="panel-card">
+          <h3>Registered Source Documents</h3>
+          <div id="sources-list"></div>
+        </div>
+
+        <div class="panel-card">
+          <h3>Recommended Excel / CSV Intake Columns</h3>
+          <p class="muted">When placing 737NG/737MAX WDM or SWPM tables into <code>context/kaynaklar/veriler/</code>, these columns map 1:1 into the workbench:</p>
+          <div class="schema-table-wrap">
+            <table class="tech-table compact-table">
+              <thead>
+                <tr>
+                  <th>Column Name</th>
+                  <th>Purpose</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td><code>WDM_Equip_No</code></td><td>WDM reference designator (e.g., D-Ref / J-Ref)</td></tr>
+                <tr><td><code>Connector_PN</code></td><td>Primary connector part number</td></tr>
+                <tr><td><code>Aircraft</code></td><td>737NG, 737MAX, or Both</td></tr>
+                <tr><td><code>Connector_Type</code></td><td>Plug / Receptacle &amp; Shell Series</td></tr>
+                <tr><td><code>Insert_Arrangement</code></td><td>Pin/Socket layout &amp; cavity count</td></tr>
+                <tr><td><code>Contact_PN</code></td><td>Compatible pin/socket contact P/N</td></tr>
+                <tr><td><code>Wire_AWG</code></td><td>Applicable wire gauge range</td></tr>
+                <tr><td><code>Crimp_Tool_PN</code></td><td>Primary crimp tool P/N</td></tr>
+                <tr><td><code>Turret_Positioner_PN</code></td><td>Turret / positioner &amp; selector setting</td></tr>
+                <tr><td><code>Ins_Rem_Tool_PN</code></td><td>Plastic/metal insertion &amp; extraction tool</td></tr>
+                <tr><td><code>Superseding_Alt_PN</code></td><td>Alternate or superseding P/N</td></tr>
+                <tr><td><code>SWPM_Ref</code></td><td>Exact manual section &amp; page (e.g. SWPM 20-61-11)</td></tr>
+                <tr><td><code>Diagram_File</code></td><td>Image filename in <code>gorseller/</code></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="app-footer">
+    <p>
+      <strong>Disclaimer:</strong> For reference and training purposes only; verify current Boeing AMM/SWPM/WDM revision before performing aircraft maintenance.
+    </p>
+    <p class="footer-meta" id="footer-meta">Schema v1.0.0 &bull; Static Offline &amp; GitHub Pages Ready</p>
+  </footer>
+
+  <!-- FULL-SCREEN DIAGRAM LIGHTBOX ZOOM MODAL -->
+  <div id="lightbox-modal" class="lightbox-modal hidden" role="dialog" aria-modal="true" aria-labelledby="lightbox-caption">
+    <div class="lightbox-toolbar">
+      <span id="lightbox-caption" class="lightbox-caption">Diagram Preview</span>
+      <div class="lightbox-actions">
+        <span id="lightbox-zoom-readout" class="zoom-readout">100%</span>
+        <button type="button" class="secondary-btn compact-btn active-zoom" data-zoom="1">Fit / 100%</button>
+        <button type="button" class="secondary-btn compact-btn" data-zoom="1.5">150%</button>
+        <button type="button" class="secondary-btn compact-btn" data-zoom="2.2">220%</button>
+        <button type="button" class="secondary-btn compact-btn" data-zoom="3">300%</button>
+        <button type="button" id="lightbox-close" class="primary-btn compact-btn">Close (Esc)</button>
+      </div>
+    </div>
+    <div class="lightbox-canvas" id="lightbox-canvas">
+      <img id="lightbox-img" src="" alt="Enlarged technical diagram" />
+    </div>
+  </div>
+
+  <!-- COPY TOAST -->
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+  <script src="data/wiring-db.offline.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

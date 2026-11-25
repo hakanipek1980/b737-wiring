@@ -1,0 +1,26 @@
+{
+  "name": "B737NG / 737MAX Wiring & SWPM Reference",
+  "short_name": "B737 Wiring",
+  "description": "Offline-ready Boeing 737NG & 737 MAX WDM connector lookup, SWPM Chapter 20 tooling matrix, and visual reference workbench.",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#0b0f17",
+  "theme_color": "#0b0f17",
+  "categories": ["utilities", "productivity", "reference"],
+  "icons": [
+    {
+      "src": "./assets/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "./assets/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
