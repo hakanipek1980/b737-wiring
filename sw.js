@@ -1,9 +1,9 @@
 /* B737NG / 737MAX Wiring Reference — Offline Hangar Service Worker (PWA) */
-const CACHE_NAME = "b737-wiring-pwa-v2";
+const CACHE_NAME = "b737-wiring-pwa-v3";
 const CORE_ASSETS = [
   "./",
   "./index.html",
-  "./style.css?v=2",
+  "./style.css?v=3",
   "./app.js",
   "./manifest.webmanifest",
   "./assets/icon-192.png",

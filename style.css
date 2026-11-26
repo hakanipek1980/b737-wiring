@@ -1786,7 +1786,6 @@ code {
 
   .workbench-right {
     position: static;
-    order: -1;
     width: 100%;
   }
 
